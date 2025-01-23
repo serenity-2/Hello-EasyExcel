@@ -50,8 +50,10 @@ public class LikeListReadListener extends AnalysisEventListener<LikeList> {
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
         //读取完所有数据后进入此方法
+        log.info("excel文件解析完成，成功:{}条，失败:{}条", successData.size(), failedLikelists.size());
         log.warn("解析失败的数据:{}", failedLikelists);
         writeExcel(failedLikelists);
+        //todo 上传失败excel到文件服务器，发送mq消息，成功x条，失败y条，失败数据的下载链接
     }
 
     private void writeExcel(List<FailedLikelist> failedLikelists) {
@@ -79,7 +81,7 @@ public class LikeListReadListener extends AnalysisEventListener<LikeList> {
                     columnData = cell.getBooleanValue().toString();
                     break;
                 default:
-                    return;
+                    break;
             }
             switch (cell.getColumnIndex()) {
                 case 0:
